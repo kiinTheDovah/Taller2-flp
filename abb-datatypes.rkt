@@ -1,4 +1,7 @@
 #lang eopl
+;Andres Felipe Arrechea Saa - 1780023
+;Nicolas Jaramillo Mayor - 1840558
+
 (define-datatype bintree bintree?
   (empty-bintree)
   (interior-node (key number?)

@@ -1,4 +1,6 @@
 #lang eopl
+;Andres Felipe Arrechea Saa - 1780023
+;Nicolas Jaramillo Mayor - 1840558
 
 ;;representacion lista
 (define empty-stack (lambda ()
