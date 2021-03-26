@@ -22,7 +22,7 @@
    (whitespace) skip)
   (comment
    ("//" (arbno (not #\newline))) skip)
-  (identifier
+  (identificador
    (letter (arbno (or letter digit "?"))) symbol)
   (number
    (digit (arbno digit)) number)
@@ -35,9 +35,13 @@
   '(
    (programa (expresion) un-program)
    (expresion (number) num-lit)
-   (expresion (expresion operacion expresion) exp-lit)
+   (expresion ("("expresion operacion expresion")") exp-lit)
    (expresion (identificador) variable)
-   (expresion (number) num-lit)
+   (expresion ("var" (arbno "("identificador "=" expresion")") "in" expresion) declaracion)
+   (operacion ("+") primitiva-sum)
+   (operacion ("-") primitiva-res)
+   (operacion ("*") primitiva-mul)
+   (operacion ("/") primitiva-div)
    )
 )
 
