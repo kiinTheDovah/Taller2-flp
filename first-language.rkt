@@ -62,25 +62,47 @@
 (define unparse-op
   (lambda (op)
     (cases operacion op
-      (primitiva-sum () '+)
-      (primitiva-res () '-)
-      (primitiva-mul () '*)
-      (primitiva-div () '/)
+      (primitiva-sum () "+")
+      (primitiva-res () "-")
+      (primitiva-mul () "*")
+      (primitiva-div () "/")
       )
     )
   )
 
+(define unparse-exp-helper
+  (lambda (ids exps)
+    (if (equal? ids empty) ""
+    (string-append
+     "("
+     (symbol->string (car ids))
+     " = "
+     (unparse-exp (car exps))
+     ") "
+     (unparse-exp-helper (cdr ids) (cdr exps))
+     ))
+    )
+  )
 (define unparse-exp
   (lambda (exp)
     (cases expresion exp
-      (num-lit (n) n)
+      (num-lit (n) (number->string n))
       (exp-lit  (exp1 op exp2)
-                (list
+                (string-append
+                 "("
                  (unparse-exp exp1)
                  (unparse-op op)
-                 (unparse-exp exp2)))
-      (variable (id) id)
-      (declaracion (ids exps cuerpo) (list ids (car (unparse-exp exps)) (unparse-exp cuerpo)))
+                 (unparse-exp exp2)
+                 ")"))
+      (variable (id) (symbol->string id))
+      (declaracion (ids exps cuerpo)
+                    (string-append
+                     "var "
+                     (unparse-exp-helper ids exps)
+                     "in "
+                     (unparse-exp cuerpo)
+                     
+                    ))
       )
     )
   )
@@ -91,4 +113,17 @@
       (un-program (expresion) (unparse-exp expresion))
       )
     )
+  )
+
+(define example1
+  (un-program
+   (exp-lit
+    (variable 'x)
+    (primitiva-mul)
+    (variable 'y)))
+  )
+(define example2
+  (scan&parse
+   "var (x = 9) (y = 4) in 5"
+   )
   )
